@@ -2,13 +2,23 @@ import React, { useState, useEffect } from "react";
 import { Table } from "antd";
 
 interface AmortiTableProps {
-  coutCred: number;
+  setTotalAssurance: Function;
+  tauxAssurance: number;
+  arrTwoDec: Function;
+  coutCreditM: number;
   capital: number;
   taux: number;
 }
 
 const AmortiTable: React.FC<AmortiTableProps> = (props) => {
-  const { capital, coutCred, taux } = props;
+  const {
+    capital,
+    coutCreditM,
+    taux,
+    tauxAssurance,
+    setTotalAssurance,
+    arrTwoDec,
+  } = props;
   const [tableData, setTableData] = useState([]);
 
   const columns = [
@@ -19,32 +29,40 @@ const AmortiTable: React.FC<AmortiTableProps> = (props) => {
       key: "rest",
     },
     { title: "Interets", dataIndex: "interet", key: "interet" },
+    { title: "Cout Assurance", dataIndex: "assuranceM", key: "assuranceM" },
+    { title: "Cumul Assurance", dataIndex: "assuranceT", key: "assuranceT" },
     { title: "Amorti / M", dataIndex: "amortiM", key: "amortiM" },
     { title: "Amorti Total", dataIndex: "amortiT", key: "amortiT" },
   ];
 
   useEffect(() => {
     const dataSource: any = [];
+    const assuranceM = arrTwoDec(capital * (tauxAssurance / 12 / 100));
     let rest = capital;
     let key = 1;
     let amortiT = 0;
-    while (rest > 0) {
+    let assuranceT = 0;
+    while (rest > 0.001) {
       const interet = rest * (taux / 12 / 100);
-      const amortiM = coutCred - interet;
+      const amortiM = coutCreditM - interet;
       amortiT += amortiM;
+      assuranceT += assuranceM;
       dataSource.push({
         key,
         mensuNumber: key,
-        rest: Math.round(rest * 100) / 100,
-        interet: Math.round(interet * 100) / 100,
-        amortiM: Math.round(amortiM * 100) / 100,
-        amortiT: Math.round(amortiT * 100) / 100,
+        rest: arrTwoDec(rest),
+        interet: arrTwoDec(interet),
+        assuranceM,
+        assuranceT: arrTwoDec(assuranceT),
+        amortiM: arrTwoDec(amortiM),
+        amortiT: arrTwoDec(amortiT),
       });
-      rest = rest + interet - coutCred;
+      rest = rest + interet - coutCreditM;
       key++;
     }
+    setTotalAssurance(assuranceT);
     setTableData(dataSource);
-  }, [coutCred]);
+  }, [coutCreditM, tauxAssurance]);
 
   return <Table columns={columns} dataSource={tableData} />;
 };

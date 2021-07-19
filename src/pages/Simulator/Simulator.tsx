@@ -7,14 +7,17 @@ const { Option } = Select;
 const Simulator: React.FC = () => {
   const [capital, setCapital] = useState<number>(188000);
   const [taux, setTaux] = useState<number>(1.3);
-  const [tauxA, setTauxA] = useState<number>(0.4);
-  const [duration, setDuration] = useState<any>(20);
+  const [tauxAssurance, setTauxAssurance] = useState<number>(0.4);
+  const [duration, setDuration] = useState<any>(25);
+  const [TotalAssurance, setTotalAssurance] = useState<number>(0);
 
-  const coutCred =
+  const coutCreditM =
     (capital * (taux / 12 / 100)) /
     (1 - Math.pow(1 + taux / 12 / 100, -(duration * 12)));
-  const interets = coutCred * duration * 12 - capital;
-  const coutAssu = capital * (tauxA / 12 / 100);
+  const interets = coutCreditM * duration * 12 - capital;
+  const coutAssu = capital * (tauxAssurance / 12 / 100);
+
+  const arrTwoDec = (number: number): number => Math.round(number * 100) / 100;
 
   return (
     <>
@@ -62,20 +65,30 @@ const Simulator: React.FC = () => {
             placeholder="TauxA"
             style={{ width: 150 }}
             step="0.01"
-            onChange={(e) => setTauxA(e as number)}
-            defaultValue={tauxA}
+            onChange={(e) => setTauxAssurance(e as number)}
+            defaultValue={tauxAssurance}
           />
         </Col>
       </Row>
 
       {Boolean(capital && duration && taux) && (
         <>
-          <h3>cout crédit mensuel : {Math.round(coutCred * 100) / 100}</h3>
-          <h3>cout assurance mensual : {Math.round(coutAssu * 100) / 100}</h3>
-          <h3>Mensualité : {Math.round((coutAssu + coutCred) * 100) / 100}</h3>
+          <h3>cout crédit mensuel : {arrTwoDec(coutCreditM)}</h3>
+          <h3>cout assurance mensuel : {arrTwoDec(coutAssu)}</h3>
+          <h3>Mensualité : {arrTwoDec(coutAssu + coutCreditM)}</h3>
 
-          <h3>Interets : {Math.round(interets * 100) / 100}</h3>
-          <AmortiTable capital={capital} taux={taux} coutCred={coutCred} />
+          <h3>cout assurance total: {arrTwoDec(TotalAssurance)}</h3>
+          <h3>Interets : {arrTwoDec(interets)}</h3>
+          <h3>Cout total du drédit : {arrTwoDec(interets + TotalAssurance)}</h3>
+
+          <AmortiTable
+            setTotalAssurance={setTotalAssurance}
+            arrTwoDec={arrTwoDec}
+            capital={capital}
+            taux={taux}
+            coutCreditM={coutCreditM}
+            tauxAssurance={tauxAssurance}
+          />
         </>
       )}
     </>
