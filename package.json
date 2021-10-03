@@ -6,15 +6,20 @@
   "scripts": {
     "start": "webpack serve --port 3000",
     "build": "NODE_ENV=production webpack",
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "jest",
     "pretty-fix": "prettier --write src/**/*.{js,scss,ts,tsx}",
     "eslint": "eslint --fix-dry-run src/"
   },
   "author": "Leinaem",
   "license": "ISC",
   "devDependencies": {
+    "@babel/core": "^7.14.8",
+    "@babel/preset-env": "^7.14.8",
+    "@babel/preset-typescript": "^7.14.5",
+    "@types/jest": "^26.0.24",
     "@typescript-eslint/eslint-plugin": "^4.28.3",
     "@typescript-eslint/parser": "^4.28.3",
+    "babel-jest": "^27.0.6",
     "css-loader": "^6.0.0",
     "eslint": "^7.30.0",
     "eslint-plugin-react": "^7.24.0",

@@ -1,0 +1,41 @@
+.ant-table {
+    margin: 10px 5%;
+    color: #fff;
+    border: 1px solid #aaa;
+    
+    .ant-table-cell {
+        color: #fff
+    }
+
+    .ant-table-thead {
+        th {
+            background-color: $primary-ligh;
+        }
+    }
+    
+    .ant-table-tbody {
+        &>tr {
+            height: 20px;
+            
+            &:nth-child(odd) {
+                background-color: $primary-color;
+            }
+            &:nth-child(even) {
+                background-color: $primary-ligh;
+            }
+            &:hover {
+                background-color: $primary-ligher;
+                &> td{
+                    background-color: $primary-ligher;
+                }
+            }
+            
+            &>td {
+                background: unset;
+                border-bottom: none;
+                padding: 2px 5px;
+            }
+        }
+        
+    }
+}

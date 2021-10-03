@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Divider, InputNumber, Row, Col, Select } from "antd";
+import { Divider, InputNumber, Row, Col, Select, Table } from "antd";
 import AmortiTable from "./AmortiTable";
 
 const { Option } = Select;
@@ -19,12 +19,44 @@ const Simulator: React.FC = () => {
 
   const arrTwoDec = (number: number): number => Math.round(number * 100) / 100;
 
+  const options = []
+  for (let i=15; i < 31; i++) {
+    options.push(<Option key={i} value={i}>{i}</Option>)
+  }
+
+  const columns = [
+    { title: "", dataIndex: "type", key: "type" },
+    { title: "Mensuel", dataIndex: "mensuel", key: "mensuel" },
+    { title: "Total", dataIndex: "total", key: "total" },
+  ]
+
+  const tableData = [
+    {
+      key: 1,
+      type: "Cout du crédit",
+      mensuel: arrTwoDec(coutCreditM),
+      total: arrTwoDec(interets),
+    },
+    {
+      key: 2,
+      type: "Cout de l'assurance",
+      mensuel: arrTwoDec(coutAssu),
+      total: arrTwoDec(TotalAssurance),
+    },
+    {
+      key: 3,
+      type: "Cout total",
+      mensuel: arrTwoDec(coutAssu + coutCreditM),
+      total: arrTwoDec(interets + TotalAssurance),
+    },
+  ];
+
   return (
     <>
       <h2>Simulation</h2>
       <Divider />
-      <Row gutter={16}>
-        <Col span={6}>
+      <Row gutter={16} justify="center" >
+        <Col span={5}>
           <h4>Capital</h4>
           <InputNumber
             placeholder="Capital"
@@ -36,7 +68,7 @@ const Simulator: React.FC = () => {
             }}
           />
         </Col>
-        <Col span={6}>
+        <Col span={5}>
           <h4>Années</h4>
           <Select
             placeholder="Duration"
@@ -44,12 +76,10 @@ const Simulator: React.FC = () => {
             onChange={(value) => setDuration(value)}
             defaultValue={duration}
           >
-            <Option value={15}>15</Option>
-            <Option value={20}>20</Option>
-            <Option value={25}>25</Option>
+            {options}
           </Select>
         </Col>
-        <Col span={6}>
+        <Col span={5}>
           <h4>Taux (crédit)</h4>
           <InputNumber
             placeholder="Taux"
@@ -59,7 +89,7 @@ const Simulator: React.FC = () => {
             defaultValue={taux}
           />
         </Col>
-        <Col span={6}>
+        <Col span={5}>
           <h4>Taux (assurance)</h4>
           <InputNumber
             placeholder="TauxA"
@@ -73,22 +103,15 @@ const Simulator: React.FC = () => {
 
       {Boolean(capital && duration && taux) && (
         <>
-          <h3>cout crédit mensuel : {arrTwoDec(coutCreditM)}</h3>
-          <h3>cout assurance mensuel : {arrTwoDec(coutAssu)}</h3>
-          <h3>Mensualité : {arrTwoDec(coutAssu + coutCreditM)}</h3>
-
-          <h3>cout assurance total: {arrTwoDec(TotalAssurance)}</h3>
-          <h3>Interets : {arrTwoDec(interets)}</h3>
-          <h3>Cout total du drédit : {arrTwoDec(interets + TotalAssurance)}</h3>
-
-          <AmortiTable
-            setTotalAssurance={setTotalAssurance}
-            arrTwoDec={arrTwoDec}
-            capital={capital}
-            taux={taux}
-            coutCreditM={coutCreditM}
-            tauxAssurance={tauxAssurance}
-          />
+        <Table columns={columns}  dataSource={tableData} pagination={false} />
+        <AmortiTable
+          setTotalAssurance={setTotalAssurance}
+          arrTwoDec={arrTwoDec}
+          capital={capital}
+          taux={taux}
+          coutCreditM={coutCreditM}
+          tauxAssurance={tauxAssurance}
+        />
         </>
       )}
     </>
