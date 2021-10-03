@@ -19,16 +19,20 @@ const Simulator: React.FC = () => {
 
   const arrTwoDec = (number: number): number => Math.round(number * 100) / 100;
 
-  const options = []
-  for (let i=15; i < 31; i++) {
-    options.push(<Option key={i} value={i}>{i}</Option>)
+  const options = [];
+  for (let i = 15; i < 31; i++) {
+    options.push(
+      <Option key={i} value={i}>
+        {i}
+      </Option>
+    );
   }
 
   const columns = [
     { title: "", dataIndex: "type", key: "type" },
     { title: "Mensuel", dataIndex: "mensuel", key: "mensuel" },
     { title: "Total", dataIndex: "total", key: "total" },
-  ]
+  ];
 
   const tableData = [
     {
@@ -55,7 +59,7 @@ const Simulator: React.FC = () => {
     <>
       <h2>Simulation</h2>
       <Divider />
-      <Row gutter={16} justify="center" >
+      <Row gutter={16} justify="center">
         <Col span={5}>
           <h4>Capital</h4>
           <InputNumber
@@ -103,15 +107,15 @@ const Simulator: React.FC = () => {
 
       {Boolean(capital && duration && taux) && (
         <>
-        <Table columns={columns}  dataSource={tableData} pagination={false} />
-        <AmortiTable
-          setTotalAssurance={setTotalAssurance}
-          arrTwoDec={arrTwoDec}
-          capital={capital}
-          taux={taux}
-          coutCreditM={coutCreditM}
-          tauxAssurance={tauxAssurance}
-        />
+          <Table columns={columns} dataSource={tableData} pagination={false} />
+          <AmortiTable
+            setTotalAssurance={setTotalAssurance}
+            arrTwoDec={arrTwoDec}
+            capital={capital}
+            taux={taux}
+            coutCreditM={coutCreditM}
+            tauxAssurance={tauxAssurance}
+          />
         </>
       )}
     </>
