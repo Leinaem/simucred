@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Divider, InputNumber, Row, Col, Select, Table } from "antd";
 import AmortiTable from "./AmortiTable";
+import GraphTest from "../../components/GraphPie";
 
 const { Option } = Select;
 
@@ -55,6 +56,21 @@ const Simulator: React.FC = () => {
     },
   ];
 
+  const graphData = [
+    {
+      name: "Credit",
+      y: capital/(capital+interets+TotalAssurance)*100,
+    },
+    {
+      name: "Interets",
+      y: interets/(capital+interets+TotalAssurance)*100,
+    },
+    {
+      name: "Assurance",
+      y: TotalAssurance/(capital+interets+TotalAssurance)*100,
+    },
+  ]
+  
   return (
     <>
       <h2>Simulation</h2>
@@ -104,6 +120,10 @@ const Simulator: React.FC = () => {
           />
         </Col>
       </Row>
+
+      <Divider />
+      <GraphTest data={graphData} />
+      <Divider />
 
       {Boolean(capital && duration && taux) && (
         <>
