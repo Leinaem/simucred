@@ -2,7 +2,6 @@ import React from "react";
 // @ts-ignore
 import ReactHighcharts from "react-highcharts";
 
-
 const initialConfig = {
   chart: {
     type: "pie",
@@ -103,9 +102,8 @@ const graphStyles = {
   },
 };
 
-
 interface GraphPieProps {
-   data: any;
+  data: any;
 }
 const GraphPie: React.FC<GraphPieProps> = (props) => {
   const config = {
@@ -113,14 +111,14 @@ const GraphPie: React.FC<GraphPieProps> = (props) => {
   };
 
   config.series[0].data = props.data;
-  
+
   return (
     <div>
-    <div style={{ height: "200px" }}>
-      <ReactHighcharts config={config} {...graphStyles} />
+      <div style={{ height: "200px" }}>
+        <ReactHighcharts config={config} {...graphStyles} />
+      </div>
     </div>
-  </div>
-);
-}
+  );
+};
 
 export default GraphPie;

@@ -1,22 +1,22 @@
-import React, { useState } from "react";
-import { Divider, InputNumber, Row, Col, Select, Table } from "antd";
+import React, { useEffect, useState } from "react";
+import { Divider, InputNumber, Row, Col, Select, Popover } from "antd";
 import AmortiTable from "./AmortiTable";
-import GraphTest from "../../components/GraphPie";
+import GraphPie from "../../components/GraphPie";
 
 const { Option } = Select;
 
 const Simulator: React.FC = () => {
   const [capital, setCapital] = useState<number>(188000);
-  const [taux, setTaux] = useState<number>(1.3);
-  const [tauxAssurance, setTauxAssurance] = useState<number>(0.4);
   const [duration, setDuration] = useState<any>(25);
-  const [TotalAssurance, setTotalAssurance] = useState<number>(0);
+  const [taux, setTaux] = useState<number>(1.3);
+  const [assuranceTaux, setAssuranceTaux] = useState<number>(0.4);
+  const [assuranceCT, setAssuranceCT] = useState<number>(0);
+  const [assuranceCM, setAssuranceCM] = useState<number>(0);
 
-  const coutCreditM =
+  const creditM =
     (capital * (taux / 12 / 100)) /
     (1 - Math.pow(1 + taux / 12 / 100, -(duration * 12)));
-  const interets = coutCreditM * duration * 12 - capital;
-  const coutAssu = capital * (tauxAssurance / 12 / 100);
+  const interets = creditM * duration * 12 - capital;
 
   const arrTwoDec = (number: number): number => Math.round(number * 100) / 100;
 
@@ -29,48 +29,33 @@ const Simulator: React.FC = () => {
     );
   }
 
-  const columns = [
-    { title: "", dataIndex: "type", key: "type" },
-    { title: "Mensuel", dataIndex: "mensuel", key: "mensuel" },
-    { title: "Total", dataIndex: "total", key: "total" },
-  ];
-
-  const tableData = [
-    {
-      key: 1,
-      type: "Cout du crédit",
-      mensuel: arrTwoDec(coutCreditM),
-      total: arrTwoDec(interets),
-    },
-    {
-      key: 2,
-      type: "Cout de l'assurance",
-      mensuel: arrTwoDec(coutAssu),
-      total: arrTwoDec(TotalAssurance),
-    },
-    {
-      key: 3,
-      type: "Cout total",
-      mensuel: arrTwoDec(coutAssu + coutCreditM),
-      total: arrTwoDec(interets + TotalAssurance),
-    },
-  ];
-
+  // Grapg pie data
   const graphData = [
     {
       name: "Credit",
-      y: capital/(capital+interets+TotalAssurance)*100,
+      y: arrTwoDec((capital / (capital + interets + assuranceCT)) * 100),
     },
     {
       name: "Interets",
-      y: interets/(capital+interets+TotalAssurance)*100,
+      y: arrTwoDec((interets / (capital + interets + assuranceCT)) * 100),
     },
     {
       name: "Assurance",
-      y: TotalAssurance/(capital+interets+TotalAssurance)*100,
+      y: arrTwoDec((assuranceCT / (capital + interets + assuranceCT)) * 100),
     },
-  ]
-  
+  ];
+
+  useEffect(() => {
+    setAssuranceCM(arrTwoDec(capital * (assuranceTaux / 12 / 100)));
+  }, [capital, assuranceTaux]);
+
+  const mensualiteResult = () => (
+    <>
+      <p>Crédit : {arrTwoDec(creditM)}€ </p>
+      <p>Assurance : {assuranceCM}€ </p>
+    </>
+  );
+
   return (
     <>
       <h2>Simulation</h2>
@@ -115,26 +100,29 @@ const Simulator: React.FC = () => {
             placeholder="TauxA"
             style={{ width: 150 }}
             step="0.01"
-            onChange={(e) => setTauxAssurance(e as number)}
-            defaultValue={tauxAssurance}
+            onChange={(e) => setAssuranceTaux(e as number)}
+            defaultValue={assuranceTaux}
           />
         </Col>
       </Row>
 
       <Divider />
-      <GraphTest data={graphData} />
+      <GraphPie data={graphData} />
+      <Divider />
+      <Popover content={mensualiteResult()}>
+        <p>Mensualité : {arrTwoDec(creditM) + assuranceCM}€ </p>
+      </Popover>
       <Divider />
 
       {Boolean(capital && duration && taux) && (
         <>
-          <Table columns={columns} dataSource={tableData} pagination={false} />
           <AmortiTable
-            setTotalAssurance={setTotalAssurance}
+            setAssuranceCT={setAssuranceCT}
             arrTwoDec={arrTwoDec}
             capital={capital}
             taux={taux}
-            coutCreditM={coutCreditM}
-            tauxAssurance={tauxAssurance}
+            creditM={creditM}
+            assuranceCM={assuranceCM}
           />
         </>
       )}
