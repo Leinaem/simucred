@@ -47,7 +47,7 @@ const Simulator: React.FC = () => {
   );
 
   return (
-    <>
+    <div className="simulator">
       <h2>Simulation</h2>
       <Divider />
       <Entries
@@ -61,11 +61,11 @@ const Simulator: React.FC = () => {
         setAssuranceTaux={setAssuranceTaux}
       />
       <Divider />
-      <GraphPie data={graphData} />
-      <Divider />
       <Popover content={mensualiteResult()}>
         <p>Mensualité : {arrTwoDec(creditM) + assuranceCM}€ </p>
       </Popover>
+      <Divider />
+      <GraphPie data={graphData} />
       <Divider />
 
       {Boolean(capital && duration && taux) && (
@@ -78,7 +78,7 @@ const Simulator: React.FC = () => {
           assuranceCM={assuranceCM}
         />
       )}
-    </>
+    </div>
   );
 };
 
