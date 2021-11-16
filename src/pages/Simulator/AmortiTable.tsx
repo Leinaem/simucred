@@ -4,14 +4,14 @@ import { Table } from "antd";
 interface AmortiTableProps {
   setAssuranceCT: Function;
   assuranceCM: number;
-  arrTwoDec: Function;
+  roundTwoDec: Function;
   creditM: number;
   capital: number;
   taux: number;
 }
 
 const AmortiTable: React.FC<AmortiTableProps> = (props) => {
-  const { capital, creditM, taux, setAssuranceCT, arrTwoDec, assuranceCM } =
+  const { capital, creditM, taux, setAssuranceCT, roundTwoDec, assuranceCM } =
     props;
   const [tableData, setTableData] = useState([]);
 
@@ -43,12 +43,12 @@ const AmortiTable: React.FC<AmortiTableProps> = (props) => {
       dataSource.push({
         key,
         mensuNumber: key,
-        rest: arrTwoDec(rest),
-        interet: arrTwoDec(interet),
+        rest: roundTwoDec(rest),
+        interet: roundTwoDec(interet),
         assuranceCM,
-        assuranceT: arrTwoDec(assuranceT),
-        amortiM: arrTwoDec(amortiM),
-        amortiT: arrTwoDec(amortiT),
+        assuranceT: roundTwoDec(assuranceT),
+        amortiM: roundTwoDec(amortiM),
+        amortiT: roundTwoDec(amortiT),
       });
       rest = rest + interet - creditM;
       key++;

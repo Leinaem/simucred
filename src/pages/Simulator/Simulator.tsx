@@ -1,14 +1,22 @@
 import React, { useEffect, useState } from "react";
-import { Divider, Popover } from "antd";
+
+// Libraries
+import { Divider } from "antd";
+
+// Components
 import AmortiTable from "./AmortiTable";
 import GraphPie from "../../components/GraphPie";
+import Synthesis from "./Synthesis";
 import Entries from "./Entries";
 
+// utils
+import { roundTwoDec } from "../../utils/format";
+
 const Simulator: React.FC = () => {
-  const [capital, setCapital] = useState<number>(188000);
+  const [capital, setCapital] = useState<number>(210000);
   const [duration, setDuration] = useState<any>(25);
-  const [taux, setTaux] = useState<number>(1.3);
-  const [assuranceTaux, setAssuranceTaux] = useState<number>(0.4);
+  const [taux, setTaux] = useState<number>(1.29);
+  const [assuranceTaux, setAssuranceTaux] = useState<number>(0.36);
   const [assuranceCT, setAssuranceCT] = useState<number>(0);
   const [assuranceCM, setAssuranceCM] = useState<number>(0);
 
@@ -17,34 +25,25 @@ const Simulator: React.FC = () => {
     (1 - Math.pow(1 + taux / 12 / 100, -(duration * 12)));
   const interets = creditM * duration * 12 - capital;
 
-  const arrTwoDec = (number: number): number => Math.round(number * 100) / 100;
-
   // Graph pie data
   const graphData = [
     {
       name: "Credit",
-      y: arrTwoDec((capital / (capital + interets + assuranceCT)) * 100),
+      y: roundTwoDec((capital / (capital + interets + assuranceCT)) * 100),
     },
     {
       name: "Interets",
-      y: arrTwoDec((interets / (capital + interets + assuranceCT)) * 100),
+      y: roundTwoDec((interets / (capital + interets + assuranceCT)) * 100),
     },
     {
       name: "Assurance",
-      y: arrTwoDec((assuranceCT / (capital + interets + assuranceCT)) * 100),
+      y: roundTwoDec((assuranceCT / (capital + interets + assuranceCT)) * 100),
     },
   ];
 
   useEffect(() => {
-    setAssuranceCM(arrTwoDec(capital * (assuranceTaux / 12 / 100)));
+    setAssuranceCM(roundTwoDec(capital * (assuranceTaux / 12 / 100)));
   }, [capital, assuranceTaux]);
-
-  const mensualiteResult = () => (
-    <>
-      <p>Crédit : {arrTwoDec(creditM)}€ </p>
-      <p>Assurance : {assuranceCM}€ </p>
-    </>
-  );
 
   return (
     <div className="simulator">
@@ -61,9 +60,12 @@ const Simulator: React.FC = () => {
         setAssuranceTaux={setAssuranceTaux}
       />
       <Divider />
-      <Popover content={mensualiteResult()}>
-        <p>Mensualité : {arrTwoDec(creditM) + assuranceCM}€ </p>
-      </Popover>
+        <Synthesis
+          creditM={creditM}
+          assuranceCM={assuranceCM}
+          assuranceCT={assuranceCT}
+          interets={interets}
+        />
       <Divider />
       <GraphPie data={graphData} />
       <Divider />
@@ -71,7 +73,7 @@ const Simulator: React.FC = () => {
       {Boolean(capital && duration && taux) && (
         <AmortiTable
           setAssuranceCT={setAssuranceCT}
-          arrTwoDec={arrTwoDec}
+          roundTwoDec={roundTwoDec}
           capital={capital}
           taux={taux}
           creditM={creditM}
