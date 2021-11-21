@@ -5,4 +5,55 @@
   .chart-container {
     height: 200px;
   }
+  .synthesis-container {
+    .item {
+      background-color: #fff;
+      text-align: center;
+      padding: 10px;
+      border: 3px solid $primary-color-dark;
+      border-radius: 10px;
+      width: 300px;
+      margin: 10px auto;
+
+      &-label {
+        color: #000;
+        font-size: 16px;
+      }
+
+      &-value {
+        color: $primary-color;
+        font-size: 32px;
+        margin: 0;
+      }
+    }
+
+    .block {
+      &-mensuality {
+        .item {
+          margin: 10px auto;
+        }
+      }
+
+      &-assurance,
+      &-credit-cost {
+        display: flex;
+        justify-content: space-evenly;
+
+        .item {
+          display: inline-block;
+          &-value {
+            font-size: 24px;
+          }
+        }
+
+        @media only screen and (max-width: 768px) {
+          display: block;
+          .item {
+            display: block;
+            margin: 10px auto;
+          }
+        }
+      }
+    }
+  }
 }

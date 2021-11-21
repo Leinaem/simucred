@@ -60,16 +60,15 @@ const Simulator: React.FC = () => {
         setAssuranceTaux={setAssuranceTaux}
       />
       <Divider />
-        <Synthesis
-          creditM={creditM}
-          assuranceCM={assuranceCM}
-          assuranceCT={assuranceCT}
-          interets={interets}
-        />
+      <Synthesis
+        creditM={creditM}
+        assuranceCM={assuranceCM}
+        assuranceCT={assuranceCT}
+        interets={interets}
+      />
       <Divider />
       <GraphPie data={graphData} />
       <Divider />
-
       {Boolean(capital && duration && taux) && (
         <AmortiTable
           setAssuranceCT={setAssuranceCT}

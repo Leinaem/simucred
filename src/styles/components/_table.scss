@@ -9,7 +9,7 @@
 
   .ant-table-thead {
     th {
-      background-color: $primary-ligh;
+      background-color: $primary-color-ligh;
     }
   }
 
@@ -21,12 +21,12 @@
         background-color: $primary-color;
       }
       &:nth-child(even) {
-        background-color: $primary-ligh;
+        background-color: $primary-color-ligh;
       }
       &:hover {
-        background-color: $primary-ligher;
+        background-color: $primary-color-ligher;
         & > td {
-          background-color: $primary-ligher;
+          background-color: $primary-color-ligher;
         }
       }
 
