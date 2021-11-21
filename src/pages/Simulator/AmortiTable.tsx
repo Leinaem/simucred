@@ -1,18 +1,19 @@
 import React, { useState, useEffect } from "react";
 import { Table } from "antd";
 
+// utils
+import { roundTwoDec } from "../../utils/format";
+
 interface AmortiTableProps {
   setAssuranceCT: Function;
   assuranceCM: number;
-  roundTwoDec: Function;
   creditM: number;
   capital: number;
   taux: number;
 }
 
 const AmortiTable: React.FC<AmortiTableProps> = (props) => {
-  const { capital, creditM, taux, setAssuranceCT, roundTwoDec, assuranceCM } =
-    props;
+  const { capital, creditM, taux, setAssuranceCT, assuranceCM } = props;
   const [tableData, setTableData] = useState([]);
 
   const columns = [

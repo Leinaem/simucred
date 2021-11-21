@@ -6,6 +6,7 @@ import { Divider } from "antd";
 // Components
 import AmortiTable from "./AmortiTable";
 import GraphPie from "../../components/GraphPie";
+import StakedColumnGraphContainer from "./StakedColumnGraphContainer";
 import Synthesis from "./Synthesis";
 import Entries from "./Entries";
 
@@ -69,10 +70,16 @@ const Simulator: React.FC = () => {
       <Divider />
       <GraphPie data={graphData} />
       <Divider />
+      <StakedColumnGraphContainer
+        capital={capital}
+        creditM={creditM}
+        taux={taux}
+        assuranceCM={assuranceCM}
+      />
+      <Divider />
       {Boolean(capital && duration && taux) && (
         <AmortiTable
           setAssuranceCT={setAssuranceCT}
-          roundTwoDec={roundTwoDec}
           capital={capital}
           taux={taux}
           creditM={creditM}
